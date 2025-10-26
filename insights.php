@@ -81,6 +81,7 @@
                 </ul>
             </nav>
         </div>
+        <script async src="https://tally.so/widgets/embed.js"></script>
     </header>
     <main id="main-content">
         <section class="hero-small">

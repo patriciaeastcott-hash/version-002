@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script async src="https://tally.so/widgets/embed.js"></script>
 </head>
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -135,5 +136,29 @@
     </footer>
     <script src="https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js" async></script>
     <vapi-widget public-key="ba54ee95-68a1-4d2b-b463-839b837dff51" assistant-id="a4dd643c-e608-4e67-ba01-c40f35959765"></vapi-widget>
+    <!-- Tally Floating Quiz Widget -->
+    <script async src="https://tally.so/widgets/embed.js"></script>
+    <script>
+        window.TallyConfig = {
+            forms: [
+                {
+                    id: "wkDaP1", // Your Tally form ID
+                    popup: {
+                        button: {
+                            // The floating button text & style
+                            text: "🤖 Find My AI Fit",
+                            backgroundColor: "#E63946", // Red to stand out
+                            textColor: "#ffffff",
+                            borderRadius: "50px",
+                            position: "bottom-right", // or "bottom-left"
+                        },
+                        layout: "modal", // Opens full quiz in a popup modal
+                        autoClose: true,
+                        open: false,
+                    },
+                },
+            ],
+        };
+    </script>
 </body>
 </html>
