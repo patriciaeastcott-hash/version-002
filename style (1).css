@@ -117,10 +117,26 @@ a:focus-visible, button:focus-visible {
     align-items: center;
 }
 
+/* This replaces the old .logo style */
 .logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-navy);
+    display: inline-block;
+    /* Ensures it behaves well with other nav items */
+    line-height: 0;
+    /* Prevents extra space under the image */
+}
+
+.logo-img {
+    display: block;
+    width: 400px;
+    /* This is the desktop size you wanted */
+    height: 150px;
+    /* This is the desktop size you wanted */
+
+    /* --- This is the responsive fix --- */
+    max-width: 100%;
+    /* Ensures the logo never overflows its container on mobile */
+    height: auto;
+    /* Overrides the fixed height to maintain aspect ratio when it scales down */
 }
 
 .main-nav ul {

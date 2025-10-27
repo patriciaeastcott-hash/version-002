@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,35 +11,41 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css"> 
-    
+    <link rel="stylesheet" href="../style.css">
+
     <style>
         .dynamic-reports-grid {
             display: grid;
-            grid-template-columns: 1fr; /* 1 column on mobile */
+            grid-template-columns: 1fr;
+            /* 1 column on mobile */
             gap: 30px;
             margin-bottom: 40px;
         }
+
         .blog-post-card {
             /* Using brand colours from your memory */
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 20px;
             background-color: #f9f9f9;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
         }
+
         .blog-post-card h3 {
-            color: var(--color-navy, #1E3A8A); 
+            color: var(--color-navy, #1E3A8A);
             margin-top: 0;
         }
+
         .blog-post-card p {
-            flex-grow: 1; /* Pushes the button to the bottom */
+            flex-grow: 1;
+            /* Pushes the button to the bottom */
         }
+
         .btn-read-more {
             display: inline-block;
-            background-color: var(--color-purple, #7C3AED); 
+            background-color: var(--color-purple, #7C3AED);
             color: #ffffff;
             padding: 10px 15px;
             border-radius: 5px;
@@ -48,28 +55,65 @@
             transition: background-color 0.3s;
             text-align: center;
         }
+
         .btn-read-more:hover {
             background-color: var(--color-navy, #1E3A8A);
         }
+
         .section-divider {
             border: 0;
             border-top: 2px solid #eee;
             margin: 40px 0;
         }
-        
+
         /* Make grid 2-col on larger screens */
         @media (min-width: 768px) {
             .dynamic-reports-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        /* Add these styles for the clickable cards */
+        .blog-post-card {
+            position: relative;
+            /* Required for the stretched link */
+        }
+
+        .blog-post-card h3 a {
+            color: var(--color-navy, #1E3A8A);
+            text-decoration: none;
+        }
+
+        .blog-post-card h3 a:hover {
+            text-decoration: underline;
+        }
+
+        /* This makes the whole card clickable */
+        .stretched-link::after {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            content: "";
+        }
+
+        /* Make sure button stays on top */
+        .btn-read-more {
+            position: relative;
+            z-index: 2;
+        }
     </style>
 </head>
+
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <header class="site-header">
         <div class="container">
-            <div class="logo">DigitalABCs</div>
+            <a href="index.html" class="logo" aria-label="DigitalABCs Home">
+                <img src="assets/logo.png" alt="DigitalABCs Logo" class="logo-img">
+            </a>
             <nav class="main-nav">
                 <ul>
                     <li><a href="../index.html">Home</a></li>
@@ -90,67 +134,83 @@
                 <p class="subtitle">Stay informed with practical AI advice, industry trends, and essential cybersecurity tips for Australian small businesses.</p>
             </div>
         </section>
-        
+
         <section class="insights-grid section-padding">
             <div class="container">
 
                 <h2>Weekly AI & Automation Reports</h2>
                 <p>Your latest AI-generated insights, delivered weekly. Newest reports are at the top.</p>
                 <div class="dynamic-reports-grid">
-                <?php
-                // Set the directory to scan (current directory)
-                $insightsDir = __DIR__;
-                $webPath = '.'; // Relative web path
-                
-                // Find all generated insight files
-                $files = glob($insightsDir . '/*_insights.html');
-                
-                // Sort files in reverse chronological order (newest first)
-                if ($files) {
-                    rsort($files);
-                    
-                    foreach ($files as $file) {
-                        $doc = new DOMDocument();
-                        // Suppress errors from parsing potentially imperfect HTML
-                        @$doc->loadHTMLFile($file);
-                        
-                        $title = 'Weekly Insight'; // Default title
-                        $summary = 'Read the latest report on AI and automation for small business.'; // Default summary
-                        
-                        // Get the real <title>
-                        $titleNodes = $doc->getElementsByTagName('title');
-                        if ($titleNodes->length > 0) {
-                            $title = $titleNodes->item(0)->textContent;
-                        }
-                        
-                        // Get the real summary
-                        $xpath = new DOMXPath($doc);
-                        $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
-                        if ($summaryNodes->length > 0) {
-                            // Get first 200 chars for a snippet
-                            $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
-                        }
-                        
-                        // Get the web-accessible file name
-                        $filename = basename($file);
-                        
-                        // Use file modification time for "Published" date
-                        $published_date = date("F j, Y", filemtime($file));
+                    <?php
+                    // Set the directory to scan (current directory)
+                    $insightsDir = __DIR__;
+                    $webPath = '.'; // Relative web path
 
-                        // Create the HTML card
-                        echo '<article class="blog-post-card">'; 
-                        echo '<h3>' . htmlspecialchars($title) . '</h3>';
-                        echo '<p class="post-meta">Published: ' . htmlspecialchars($published_date) . '</p>';
-                        echo '<p>' . htmlspecialchars($summary) . '</p>';
-                        echo '<a href="' . htmlspecialchars($webPath . '/' . $filename) . '" class="btn-read-more">Read Full Report</a>';
-                        echo '</article>';
-                    }
-                } else {
-                    echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
-                }
-                ?>
+                    // Find all generated insight files
+                    $files = glob($insightsDir . '/*_insights.html');
+
+                    if ($files) {
+                    rsort($files);
+
+                        if ($files) {
+                            rsort($files);
+
+                            // This loop finds each .html file, reads its title/summary, and creates a card
+                            foreach ($files as $file) {
+                                $doc = new DOMDocument();
+                                // Suppress errors from parsing potentially imperfect HTML
+                                @$doc->loadHTMLFile($file);
+
+                                $title = 'Weekly Insight'; // Default title
+                                $summary = 'Read the latest report on AI and automation for small business.'; // Default summary
+
+                                // Get the real <title>
+                                $titleNodes = $doc->getElementsByTagName('title');
+                                if ($titleNodes->length > 0) {
+                                    $title = $titleNodes->item(0)->textContent;
+                                }
+
+                                // Get the real summary
+                                $xpath = new DOMXPath($doc);
+                                $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
+                                if ($summaryNodes->length > 0) {
+                                    // Get first 200 chars for a snippet
+                                    $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
+                                }
+
+                                // --- START: CORRECTED CODE BLOCK ---
+
+                                // Get the web-accessible file name
+                                $filename = basename($file);
+
+                                // Use file modification time for "Published" date
+                                $published_date = date("F j, Y", filemtime($file));
+
+                                // Store the link URL
+                                $link_url = htmlspecialchars($webPath . '/' . $filename);
+
+                                // Create the HTML card
+                                echo '<article class="blog-post-card">';
+
+                                // Make the <h3> title the main link and add the "stretched-link" class
+                                echo '<h3><a href="' . $link_url . '" class="stretched-link">' . htmlspecialchars($title) . '</a></h3>';
+
+                                echo '<p class="post-meta">Published: ' . htmlspecialchars($published_date) . '</p>';
+                                echo '<p>' . htmlspecialchars($summary) . '</p>';
+
+                                // This button still works, but the whole card is now clickable
+                                echo '<a href="' . $link_url . '" class="btn-read-more">Read Full Report</a>';
+                                echo '</article>';
+
+                                // --- END: CORRECTED CODE BLOCK ---
+                            }
+                        } else {
+                            echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
+                        }
+                        }           ?>
                 </div>
-                <hr class="section-divider"> <h2>From the Blog</h2>
+                <hr class="section-divider">
+                <h2>From the Blog</h2>
                 <p>Our foundational articles on AI, security, and local business growth.</p>
 
                 <article class="blog-post">
@@ -209,7 +269,7 @@
                 </div>
                 <div class="footer-col">
                     <h4>Connect</h4>
-                     <p>info@digitalabcs.com.au<br>Toongabbie, NSW, Australia</p>
+                    <p>info@digitalabcs.com.au<br>Toongabbie, NSW, Australia</p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -218,4 +278,5 @@
         </div>
     </footer>
 </body>
+
 </html>
