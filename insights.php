@@ -125,16 +125,14 @@
                 </ul>
             </nav>
         </div>
-        <script async src="https://tally.so/widgets/embed.js"></script>
     </header>
     <main id="main-content">
-        <section class="hero-small">
+        <section class="hero">
             <div class="container">
-                <h1>Insights from DigitalABCs</h1>
+                <h1>Insights from Digital ABCs</h1>
                 <p class="subtitle">Stay informed with practical AI advice, industry trends, and essential cybersecurity tips for Australian small businesses.</p>
             </div>
         </section>
-
         <section class="insights-grid section-padding">
             <div class="container">
 
