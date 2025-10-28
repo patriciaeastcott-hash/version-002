@@ -141,11 +141,14 @@ button:focus-visible {
 
 .logo-img {
     display: block;
+    width: 300px;
+    /* This is the desktop size you wanted */
+
     /* --- This is the responsive fix --- */
-    max-width: 100%;
+    max-width: 50%;
     /* Ensures the logo never overflows its container on mobile */
     height: auto;
-    /* Overrides the fixed height to maintain aspect ratio when it scales down */
+    /* Overrides the fixed height to maintain aspect ratio */
 }
 
 .main-nav ul {

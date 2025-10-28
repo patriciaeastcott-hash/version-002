@@ -142,63 +142,72 @@
                 <p>Your latest AI-generated insights, delivered weekly. Newest reports are at the top.</p>
                 <div class="dynamic-reports-grid">
                     <?php
-                    // Set the directory to scan (current directory)
-                    $insightsDir = __DIR__;
-                    $webPath = '.'; // Relative web path
+                    // Set the directory to scan
+                    $insightsDir = __DIR__ . '/insights'; // <-- FIX: Look in the 'insights' sub-folder
+                    $webPath = './insights';         // <-- FIX: Set the correct web path for links
 
                     // Find all generated insight files
                     $files = glob($insightsDir . '/*_insights.html');
+
                     if ($files) {
-                        rsort($files);
+                        rsort($files); // Sort files by name (newest first, assuming timestamp)
 
                         // This loop finds each .html file, reads its title/summary, and creates a card
                         foreach ($files as $file) {
                             $doc = new DOMDocument();
-                            // Suppress errors from parsing potentially imperfect HTML
+                            // Suppress errors from parsing
                             @$doc->loadHTMLFile($file);
+                            $xpath = new DOMXPath($doc);
 
-                            $title = 'Weekly Insight'; // Default title
-                            $summary = 'Read the latest report on AI and automation for small business.'; // Default summary
-
-                            // Get the real <title>
+                            // --- Get Title ---
+                            $title = 'Weekly Insight'; // Default
                             $titleNodes = $doc->getElementsByTagName('title');
                             if ($titleNodes->length > 0) {
                                 $title = $titleNodes->item(0)->textContent;
                             }
 
-                            // Get the real summary
-                            $xpath = new DOMXPath($doc);
+                            // --- Get Summary ---
+                            $summary = 'Read the latest report on AI and automation.'; // Default
                             $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
                             if ($summaryNodes->length > 0) {
-                                // Get first 200 chars for a snippet
                                 $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
                             }
 
-                            // --- START: CORRECTED CODE BLOCK ---
+                            // --- (NEW) Get Image & Alt Text ---
+                            $img_src = '../assets/insights/default.jpg'; // Default placeholder image
+                            $alt_text = 'DigitalABCs Insight Article';     // Default alt text
+
+                            // Get AI-generated alt text from meta tag
+                            $altNodes = $xpath->query("//meta[@name='image-alt']");
+                            if ($altNodes->length > 0) {
+                                $alt_text = $altNodes->item(0)->getAttribute('content');
+                            }
+
+                            // Get image filename from meta tag
+                            $imgNodes = $xpath->query("//meta[@name='image-filename']");
+                            if ($imgNodes->length > 0) {
+                                $img_src = $webPath . '/' . $imgNodes->item(0)->getAttribute('content');
+                            }
+                            // --- (END NEW) ---
 
                             // Get the web-accessible file name
                             $filename = basename($file);
-
-                            // Use file modification time for "Published" date
                             $published_date = date("F j, Y", filemtime($file));
-
-                            // Store the link URL
                             $link_url = htmlspecialchars($webPath . '/' . $filename);
 
                             // Create the HTML card
                             echo '<article class="blog-post-card">';
 
-                            // Make the <h3> title the main link and add the "stretched-link" class
-                            echo '<h3><a href="' . $link_url . '" class="stretched-link">' . htmlspecialchars($title) . '</a></h3>';
+                            // (NEW) Add the image
+                            echo '<img src="' . htmlspecialchars($img_src) . '" alt="' . htmlspecialchars($alt_text) . '" class="blog-card-image">';
 
+                            echo '<h3><a href="' . $link_url . '" class="stretched-link">' . htmlspecialchars($title) . '</a></h3>';
                             echo '<p class="post-meta">Published: ' . htmlspecialchars($published_date) . '</p>';
                             echo '<p>' . htmlspecialchars($summary) . '</p>';
 
-                            // This button still works, but the whole card is now clickable
-                            echo '<a href="' . $link_url . '" class="btn-read-more">Read Full Report</a>';
-                            echo '</article>';
+                            // "Read More" button is now removed (Task 7)
 
-                            // --- END: CORRECTED CODE BLOCK ---
+                            echo '</article>';
                         }
                     } else {
                         echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
@@ -208,35 +217,6 @@
                 <hr class="section-divider">
                 <h2>From the Blog</h2>
                 <p>Our foundational articles on AI, security, and local business growth.</p>
-
-                <article class="blog-post">
-                    <h2>AI in Western Sydney: How Local Businesses are Thriving</h2>
-                    <p class="post-meta">By DigitalABCs Team | October 10, 2025 | Local Business, AI Adoption</p>
-                    <img src="../assets/western-sydney-ai.jpg" alt="A vibrant cityscape of Western Sydney with subtle AI interface overlays, suggesting growth and innovation.">
-                    <p>Western Sydney is a powerhouse of small businesses...</p>
-                    <p>At DigitalABCs, we're passionate about helping our local community... <a href="../contact.html">Let's chat.</a></p>
-                </article>
-                <article class="blog-post">
-                    <h2>Beyond ChatGPT: 5 AI Tools Small Businesses Aren't Using (But Should Be)</h2>
-                    <p class="post-meta">By DigitalABCs Team | September 28, 2025 | AI Tools, Productivity, Business Growth</p>
-                    <img src="../assets/ai-tools.jpg" alt="A diverse set of creative and technical tools, some with subtle glowing AI icons, suggesting varied applications.">
-                    <p>Everyone knows ChatGPT, but the world of AI extends far beyond...</p>
-                    <p>These tools are accessible, affordable... <a href="../services.html#ai-integrations">Check out our AI Integrations service.</a></p>
-                </article>
-                <article class="blog-post">
-                    <h2>Australian Cyber Scams: Key Stats & How AI Helps You Stay Safe</h2>
-                    <p class="post-meta">By DigitalABCs Team | September 20, 2025 | Cybersecurity, Scams, Data Protection</p>
-                    <img src="../assets/cyber-security.jpg" alt="A digital padlock surrounded by abstract glowing lines, symbolising cybersecurity and data protection.">
-                    <p>In our increasingly connected world, cyber scams are a constant threat...</p>
-                    <p>Don't be a statistic... <a href="../contact.html">Protect your business today.</a></p>
-                </article>
-            </div>
-        </section>
-        <section class="cta-section section-padding">
-            <div class="container">
-                <h2>Want More Insights & Direct Support?</h2>
-                <p>Subscribe to our newsletter for the latest AI trends and cybersecurity tips, or book a free call to discuss specific challenges your business faces.</p>
-                <a href="../contact.html" class="btn btn-primary">Book a Free Discovery Call</a>
             </div>
         </section>
     </main>
@@ -273,6 +253,45 @@
             </div>
         </div>
     </footer>
+    <style>
+        .tally-float-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #ba38eb;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            padding: 14px 22px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .tally-float-btn:hover {
+            background-color: #10B981;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .tally-float-btn {
+                padding: 12px 18px;
+                font-size: 14px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+    <button class="tally-float-btn" data-tally-open="wkDaP1"
+        data-tally-layout="modal" data-tally-width="700" data-tally-overlay="true"
+        data-tally-hide-title="false" data-tally-emoji-text="ðŸ’¡"
+        data-tally-emoji-animation="tada"> Where are you in your AI journey?</button>
 </body>
 
 </html>
