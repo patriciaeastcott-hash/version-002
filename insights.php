@@ -148,66 +148,62 @@
 
                     // Find all generated insight files
                     $files = glob($insightsDir . '/*_insights.html');
-
                     if ($files) {
-                    rsort($files);
+                        rsort($files);
 
-                        if ($files) {
-                            rsort($files);
+                        // This loop finds each .html file, reads its title/summary, and creates a card
+                        foreach ($files as $file) {
+                            $doc = new DOMDocument();
+                            // Suppress errors from parsing potentially imperfect HTML
+                            @$doc->loadHTMLFile($file);
 
-                            // This loop finds each .html file, reads its title/summary, and creates a card
-                            foreach ($files as $file) {
-                                $doc = new DOMDocument();
-                                // Suppress errors from parsing potentially imperfect HTML
-                                @$doc->loadHTMLFile($file);
+                            $title = 'Weekly Insight'; // Default title
+                            $summary = 'Read the latest report on AI and automation for small business.'; // Default summary
 
-                                $title = 'Weekly Insight'; // Default title
-                                $summary = 'Read the latest report on AI and automation for small business.'; // Default summary
-
-                                // Get the real <title>
-                                $titleNodes = $doc->getElementsByTagName('title');
-                                if ($titleNodes->length > 0) {
-                                    $title = $titleNodes->item(0)->textContent;
-                                }
-
-                                // Get the real summary
-                                $xpath = new DOMXPath($doc);
-                                $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
-                                if ($summaryNodes->length > 0) {
-                                    // Get first 200 chars for a snippet
-                                    $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
-                                }
-
-                                // --- START: CORRECTED CODE BLOCK ---
-
-                                // Get the web-accessible file name
-                                $filename = basename($file);
-
-                                // Use file modification time for "Published" date
-                                $published_date = date("F j, Y", filemtime($file));
-
-                                // Store the link URL
-                                $link_url = htmlspecialchars($webPath . '/' . $filename);
-
-                                // Create the HTML card
-                                echo '<article class="blog-post-card">';
-
-                                // Make the <h3> title the main link and add the "stretched-link" class
-                                echo '<h3><a href="' . $link_url . '" class="stretched-link">' . htmlspecialchars($title) . '</a></h3>';
-
-                                echo '<p class="post-meta">Published: ' . htmlspecialchars($published_date) . '</p>';
-                                echo '<p>' . htmlspecialchars($summary) . '</p>';
-
-                                // This button still works, but the whole card is now clickable
-                                echo '<a href="' . $link_url . '" class="btn-read-more">Read Full Report</a>';
-                                echo '</article>';
-
-                                // --- END: CORRECTED CODE BLOCK ---
+                            // Get the real <title>
+                            $titleNodes = $doc->getElementsByTagName('title');
+                            if ($titleNodes->length > 0) {
+                                $title = $titleNodes->item(0)->textContent;
                             }
-                        } else {
-                            echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
+
+                            // Get the real summary
+                            $xpath = new DOMXPath($doc);
+                            $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
+                            if ($summaryNodes->length > 0) {
+                                // Get first 200 chars for a snippet
+                                $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
+                            }
+
+                            // --- START: CORRECTED CODE BLOCK ---
+
+                            // Get the web-accessible file name
+                            $filename = basename($file);
+
+                            // Use file modification time for "Published" date
+                            $published_date = date("F j, Y", filemtime($file));
+
+                            // Store the link URL
+                            $link_url = htmlspecialchars($webPath . '/' . $filename);
+
+                            // Create the HTML card
+                            echo '<article class="blog-post-card">';
+
+                            // Make the <h3> title the main link and add the "stretched-link" class
+                            echo '<h3><a href="' . $link_url . '" class="stretched-link">' . htmlspecialchars($title) . '</a></h3>';
+
+                            echo '<p class="post-meta">Published: ' . htmlspecialchars($published_date) . '</p>';
+                            echo '<p>' . htmlspecialchars($summary) . '</p>';
+
+                            // This button still works, but the whole card is now clickable
+                            echo '<a href="' . $link_url . '" class="btn-read-more">Read Full Report</a>';
+                            echo '</article>';
+
+                            // --- END: CORRECTED CODE BLOCK ---
                         }
-                        }           ?>
+                    } else {
+                        echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
+                    }
+                    ?>
                 </div>
                 <hr class="section-divider">
                 <h2>From the Blog</h2>
