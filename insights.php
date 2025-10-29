@@ -166,10 +166,18 @@
 
                             // --- Get Summary ---
                             $summary = 'Read the latest report on AI and automation.'; // Default
-                            $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
-                            if ($summaryNodes->length > 0) {
-                                $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
-                            }
+
+                            // 1. First, try to get the short, punchy tile summary from the meta tag
+                            $tileSummaryNodes = $xpath->query("//meta[@name='tile-summary']");
+                            if ($tileSummaryNodes->length > 0) {
+                                $summary = $tileSummaryNodes->item(0)->getAttribute('content');
+                            } else {
+                                // 2. (FALLBACK) If not found, use the old method: truncate the main summary
+                                $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
+                                if ($summaryNodes->length > 0) {
+                                    // Using 160 chars as a standard "meta description" length
+                                    $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 160) . '...';
+                                }
 
                             // --- (NEW) Get Image & Alt Text ---
                             $img_src = '../assets/insights/default.jpg'; // Default placeholder image
@@ -207,9 +215,10 @@
 
                             echo '</article>';
                         }
-                    } else {
+                    } 
+                }
+                    else
                         echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
-                    }
                     ?>
                 </div>
                 <hr class="section-divider">
