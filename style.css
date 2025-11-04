@@ -570,3 +570,129 @@ button:focus-visible {
     list-style-position: inside;
     padding-left: 1rem;
 }
+
+
+/* =========== 9. NEW SECONDARY NAVIGATION =========== */
+
+/* --- Secondary Nav Container --- */
+.secondary-nav {
+    font-family: var(--font-primary);
+    padding: 1rem 0;
+    /* Reduced padding to make it less imposing than a section */
+    margin-top: -2rem;
+    /* Pulls it up closer to the hero */
+    margin-bottom: 2rem;
+    /* Space before article tiles */
+    border-bottom: 1px solid #e5e7eb;
+    /* Light separator */
+    background-color: var(--color-white);
+}
+
+/* --- Dropdown Container --- */
+.resources-dropdown {
+    position: relative;
+    /* Anchors the absolute-positioned menu */
+    display: inline-block;
+}
+
+/* --- Dropdown Toggle Button --- */
+.resources-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+
+    /* BRAND: Using Navy primary color */
+    background-color: var(--color-navy);
+    color: var(--color-white);
+
+    /* BRAND: Rounded corners */
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.75rem 1.25rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.resources-toggle:hover {
+    background-color: #1c347a;
+    /* Slightly darker Navy */
+}
+
+/*
+  WCAG (OPERABLE): Visible Focus
+  This applies a highly-visible ring using your brand's
+  Purple accent color when a user navigates via keyboard.
+*/
+.resources-toggle:focus-visible {
+    outline: 3px solid var(--color-purple);
+    outline-offset: 2px;
+}
+
+/* --- Dropdown Menu Panel --- */
+.resources-menu {
+    /* Hidden by default */
+    display: none;
+
+    /* BRAND: Soft shadow and rounded corners */
+    position: absolute;
+    top: calc(100% + 8px);
+    /* Position 8px below the button */
+    left: 0;
+    background-color: var(--color-white);
+    border: 1px solid #e5e7eb;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    min-width: 220px;
+    z-index: 100;
+}
+
+/* This class is added by JavaScript to show the menu */
+.resources-menu.show {
+    display: block;
+}
+
+.resources-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    /* Padding inside the dropdown box */
+}
+
+.resources-menu li {
+    margin: 0;
+}
+
+.resources-menu a {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    text-decoration: none;
+
+    /* BRAND: Navy text on white bg */
+    color: var(--color-navy);
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.resources-menu a:hover,
+.resources-menu a:focus {
+    /* BRAND: Light blue for hover/focus */
+    background-color: #f0f5ff;
+    /* A very light blue */
+    color: #1c347a;
+    text-decoration: none;
+}
+
+/*
+  WCAG (OPERABLE): Visible Focus for menu items
+*/
+.resources-menu a:focus-visible {
+    outline: 2px solid var(--color-purple);
+    outline-offset: -2px;
+    /* Inset outline */
+    text-decoration: none;
+}
+
+/* =========== END SECONDARY NAVIGATION =========== */

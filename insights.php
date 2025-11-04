@@ -2,6 +2,17 @@
 <html lang="en">
 
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4JD4ZCN0G8"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-4JD4ZCN0G8');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Insights & Blog - DigitalABCs</title>
@@ -116,15 +127,16 @@
             </a>
             <nav class="main-nav">
                 <ul>
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../about.html">About</a></li>
-                    <li><a href="../services.html">Services</a></li>
-                    <li><a href="insights.php" class="active">Insights</a></li>
-                    <li><a href="../contact.html">Contact</a></li>
-                    <a href="https://services.digitalabcs.com.au" target="_blank">Client Login</a>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html" class="active">About</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="insights.php">Insights</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="https://services.digitalabcs.com.au" target="_blank" rel="noopener noreferrer">Client Login</a></li>
                 </ul>
             </nav>
         </div>
+        <script async src="https://tally.so/widgets/embed.js"></script>
     </header>
     <main id="main-content">
         <section class="hero">
@@ -133,6 +145,37 @@
                 <p class="subtitle">Stay informed with practical AI advice, industry trends, and essential cybersecurity tips for Australian small businesses.</p>
             </div>
         </section>
+
+        <nav class="secondary-nav" aria-label="Secondary site resources">
+            <div class="container">
+                <div class="resources-dropdown">
+                    <button
+                        id="resources-toggle"
+                        class="resources-toggle"
+                        aria-expanded="false"
+                        aria-controls="resources-menu">
+                        Resources
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            width="20"
+                            height="20">
+                            <path
+                                fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                    <div id="resources-menu" class="resources-menu">
+                        <ul>
+                            <li><a href="prompt_refinement.html">Prompt Builder</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
         <section class="insights-grid section-padding">
             <div class="container">
 
@@ -142,7 +185,7 @@
                     <?php
                     // Set the directory to scan
                     $insightsDir = __DIR__ . '/insights'; // <-- FIX: Look in the 'insights' sub-folder
-                    $webPath = './insights';         // <-- FIX: Set the correct web path for links
+                    $webPath = './insights';     // <-- FIX: Set the correct web path for links
 
                     // Find all generated insight files
                     $files = glob($insightsDir . '/*_insights.html');
@@ -166,18 +209,10 @@
 
                             // --- Get Summary ---
                             $summary = 'Read the latest report on AI and automation.'; // Default
-
-                            // 1. First, try to get the short, punchy tile summary from the meta tag
-                            $tileSummaryNodes = $xpath->query("//meta[@name='tile-summary']");
-                            if ($tileSummaryNodes->length > 0) {
-                                $summary = $tileSummaryNodes->item(0)->getAttribute('content');
-                            } else {
-                                // 2. (FALLBACK) If not found, use the old method: truncate the main summary
-                                $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
-                                if ($summaryNodes->length > 0) {
-                                    // Using 160 chars as a standard "meta description" length
-                                    $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 160) . '...';
-                                }
+                            $summaryNodes = $xpath->query("//p[contains(@class, 'summary-text')]");
+                            if ($summaryNodes->length > 0) {
+                                $summary = substr(trim($summaryNodes->item(0)->textContent), 0, 200) . '...';
+                            }
 
                             // --- (NEW) Get Image & Alt Text ---
                             $img_src = '../assets/insights/default.jpg'; // Default placeholder image
@@ -215,10 +250,9 @@
 
                             echo '</article>';
                         }
-                    } 
-                }
-                    else
+                    } else {
                         echo '<p>No weekly reports have been generated yet. Please check back soon.</p>';
+                    }
                     ?>
                 </div>
                 <hr class="section-divider">
@@ -297,8 +331,64 @@
     </style>
     <button class="tally-float-btn" data-tally-open="wkDaP1"
         data-tally-layout="modal" data-tally-width="700" data-tally-overlay="true"
-        data-tally-hide-title="false" data-tally-emoji-text="ðŸ’¡"
+        data-tally-hide-title="false" data-tally-emoji-text="💡"
         data-tally-emoji-animation="tada"> Where are you in your AI journey?</button>
+
+    <script>
+        /*
+      ACCESSIBLE DROPDOWN SCRIPT
+      Complies with WCAG principles (Operable, Robust)
+    */
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('resources-toggle');
+            const menu = document.getElementById('resources-menu');
+
+            if (!toggleBtn || !menu) {
+                // Failsafe if elements don't exist
+                return;
+            }
+
+            // --- Toggle on Button Click ---
+            toggleBtn.addEventListener('click', function(event) {
+                // Stop the click from bubbling up to the document listener
+                event.stopPropagation();
+
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+
+                // Toggle ARIA attribute for screen readers
+                this.setAttribute('aria-expanded', !isExpanded);
+
+                // Toggle CSS class to show/hide menu
+                menu.classList.toggle('show');
+            });
+
+            // --- Close on 'Escape' Key ---
+            // WCAG (OPERABLE): Allows keyboard users to close the menu
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') {
+                    if (menu.classList.contains('show')) {
+                        menu.classList.remove('show');
+                        toggleBtn.setAttribute('aria-expanded', 'false');
+
+                        // Return focus to the button for a good UX
+                        toggleBtn.focus();
+                    }
+                }
+            });
+
+            // --- Close When Clicking Outside ---
+            // WCAG (OPERABLE): Allows pointer users to close by clicking away
+            document.addEventListener('click', function(event) {
+                if (menu.classList.contains('show') &&
+                    !menu.contains(event.target) &&
+                    !toggleBtn.contains(event.target)) {
+
+                    menu.classList.remove('show');
+                    toggleBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
